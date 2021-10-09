@@ -5,6 +5,8 @@ const dotenv = require("dotenv");
 
 dotenv.config();
 
+const PORT = process.env.port || 8800;
+
 try {
   mongoose.connect(
     process.env.MONGO_URL,
@@ -24,6 +26,6 @@ const passengerRoute = require("./routes/passenger");
 app.use("/api", airlineRoute);
 app.use("/api", passengerRoute);
 
-app.listen(8800, () => {
-  console.log("Backend running on 8800 !");
+app.listen(PORT, () => {
+  console.log(`Backend running on ${PORT} !`);
 });
