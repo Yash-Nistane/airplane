@@ -2,6 +2,28 @@ const router = require("express").Router();
 const Passenger = require("../models/passenger");
 const Airline = require("../models/airline");
 
+//pagination 
+router.get("/passenger", async (req, res) => {
+
+  let {page, size} = req.query;
+  const limit = parseInt(size);
+  const skip = (page )*size;
+
+  try {
+    Passenger.find().limit(limit).skip(skip)
+      .populate("airline")
+      .exec((error, passenger) => {
+        if (error) return res.status(400).json({ error });
+
+        if (passenger) {
+          return res.status(200).json({page, size, passenger });
+        }
+      });
+  } catch (error) {
+    res.status(500).json({ error });
+  }
+});
+
 //read passenger
 router.get("/passenger/:id", async (req, res) => {
   console.log(req.params.id);
@@ -89,5 +111,8 @@ router.delete("/passenger/:id", async (req, res) => {
     res.status(400).json({ error });
   }
 });
+
+//pagination 
+
 
 module.exports = router;
